@@ -13,7 +13,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     axios
-      .get("https://imdb-api.com/en/API/MostPopularTvs/k_j1hexm69", {
+      .get("https://imdb-api.com/en/API/MostPopularTvs/k_qolyo557", {
         params: {},
       })
       .then((response) => {
