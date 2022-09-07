@@ -1,24 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import LandingPage from "./landing-page";
+import LayoutFile from "./LayoutFolder/layout-m";
+import { Routes, Route } from "react-router-dom";
+import Movie from "./singliemovie";
+import ContextShare from "./context";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ContextShare>
+      <LayoutFile>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/movie" element={<Movie />} />
+        </Routes>
+      </LayoutFile>
+    </ContextShare>
   );
 }
 
