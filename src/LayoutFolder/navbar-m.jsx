@@ -1,6 +1,21 @@
+import axios from "axios";
+import { useContext } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { CreateContext } from "../context";
 
 export default function Navbar() {
+  const [search, setSeach] = useState("");
+  const [value, setValue] = useState("");
+  const { setShareMovie } = useContext(CreateContext);
+  useEffect(() => {
+    axios
+      .get(`https://imdb-api.com/en/API/SearchMovie/k_j1hexm69${`/${search}`}`)
+      .then((response) => {
+        setShareMovie(response.data.results);
+      });
+  }, [search]);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to={"/"}>
@@ -63,17 +78,24 @@ export default function Navbar() {
         </ul>
         <form className="form-inline my-2 my-lg-0">
           <input
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
             className="form-control mr-sm-2"
             type="search"
             placeholder="Search"
             aria-label="Search"
           />
-          <button
+
+          <Link
+            to={"search"}
+            onClick={() => {
+              setSeach(value);
+            }}
             className="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
           >
             Search
-          </button>
+          </Link>
         </form>
       </div>
     </nav>

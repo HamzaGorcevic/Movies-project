@@ -13,7 +13,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     axios
-      .get("https://imdb-api.com/en/API/MostPopularTvs/k_qolyo557", {
+      .get("https://imdb-api.com/en/API/Top250Movies/k_1p4c9h6h", {
         params: {},
       })
       .then((response) => {
@@ -28,18 +28,22 @@ export default function LandingPage() {
           <div
             className="bg-primary text-light p-2 d-flex flex-column justify-content-end"
             key={index}
-            style={{ width: 350, height: "auto", margin: 10 }}
+            style={{ width: 200, height: 300, margin: 10 }}
           >
             <img
               src={el.image}
               style={{
                 width: "100%",
-                height: "300px",
+                height: "50%",
                 marginBottom: "auto",
               }}
             />
 
-            <h5>{el.title}</h5>
+            <h5>
+              {el.title?.length > 20
+                ? `${el.title?.slice(0, 20)}....`
+                : el.title}
+            </h5>
             <div className="justify-content-between d-flex">
               <p>{el.year}</p>
               <p>
