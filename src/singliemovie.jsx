@@ -5,6 +5,7 @@ import { CreateContext } from "./context";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
+import { DynamicStar } from "react-dynamic-star";
 
 export default function Movie() {
   const { shareId } = useContext(CreateContext);
@@ -64,19 +65,20 @@ export default function Movie() {
           >
             <h1 style={{ whiteSpace: "nowrap" }}>{movie.title}</h1>
             <div
-              className="d-flex justify-content-around"
+              className="d-flex flex-column"
               style={{
                 width: 250,
               }}
             >
               <h2>
-                <i
-                  className={`bi bi-star${
-                    Number(movie.imDbRating) < 7 ? "-half" : "-fill"
-                  } text-warning`}
-                ></i>
+                <DynamicStar
+                  rating={movie.imDbRating}
+                  totalStars={10}
+                  width={30}
+                  height={30}
+                  emptyStarColor={"grey"}
+                />
               </h2>
-              <h2>{movie.imDbRating}</h2>
 
               <h4 style={{ whiteSpace: "nowrap" }}>
                 {movie.imDbRatingVotes} votes

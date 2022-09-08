@@ -4,23 +4,30 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CreateContext } from "./context";
+import { DynamicStar } from "react-dynamic-star";
 export default function LandingPage() {
   const [movies, setMovies] = useState([]);
 
-  const { shareId, setShareId } = useContext(CreateContext);
-  console.log(shareId);
+  const { shareId, setShareId, type } = useContext(CreateContext);
+
   const key = "k_v6804dc1";
 
   useEffect(() => {
     axios
-      .get("https://imdb-api.com/en/API/Top250Movies/k_1p4c9h6h", {
-        params: {},
-      })
+      .get(
+        `https://imdb-api.com/en/API/${
+          type !== "SearchMovie" ? "Top250TVs" : "Top250Movies"
+        }/k_j1hexm69`,
+        {
+          params: {},
+        }
+      )
       .then((response) => {
+        console.log("something");
         setMovies(response.data.items);
       });
-  }, []);
-  console.log(movies);
+  }, [type]);
+
   return (
     <div className="d-flex flex-wrap bg-dark justify-content-center pt-5">
       {movies.map((el, index) => {
@@ -28,29 +35,33 @@ export default function LandingPage() {
           <div
             className="bg-primary text-light p-2 d-flex flex-column justify-content-end"
             key={index}
-            style={{ width: 200, height: 300, margin: 10 }}
+            style={{ width: 400, height: 700, margin: 20 }}
           >
             <img
               src={el.image}
               style={{
                 width: "100%",
-                height: "50%",
+                height: "60%",
                 marginBottom: "auto",
               }}
             />
 
-            <h5>
+            <h3>
               {el.title?.length > 20
                 ? `${el.title?.slice(0, 20)}....`
                 : el.title}
-            </h5>
-            <div className="justify-content-between d-flex">
+            </h3>
+            <div className="d-flex flex-column">
               <p>{el.year}</p>
               <p>
-                <span>
-                  <i className="bi bi-star-fill text-warning mr-2"></i>
-                </span>
-                {el.imDbRating}
+                <DynamicStar
+                  rating={el.imDbRating}
+                  width={20}
+                  height={20}
+                  totalStars={10}
+                  emptyStarColor={"grey"}
+                />
+                Rated: {el.imDbRatingCount}
               </p>
             </div>
             <Link

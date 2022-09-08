@@ -7,14 +7,16 @@ import { CreateContext } from "../context";
 export default function Navbar() {
   const [search, setSeach] = useState("");
   const [value, setValue] = useState("");
-  const { setShareMovie } = useContext(CreateContext);
+  const { setShareMovie, setType, type } = useContext(CreateContext);
+
   useEffect(() => {
     axios
-      .get(`https://imdb-api.com/en/API/SearchMovie/k_j1hexm69${`/${search}`}`)
+      .get(`https://imdb-api.com/en/API/${type}/k_j1hexm69/${search}`)
       .then((response) => {
         setShareMovie(response.data.results);
+        setValue("");
       });
-  }, [search]);
+  }, [search, type]);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -58,12 +60,21 @@ export default function Navbar() {
               Dropdown
             </a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="#">
-                Action
-              </a>
-              <a className="dropdown-item" href="#">
-                Another action
-              </a>
+              <button
+                onClick={() => {
+                  setType("SearchMovie");
+                }}
+              >
+                Movies
+              </button>
+              <button
+                onClick={() => {
+                  setType("SearchSeries");
+                }}
+              >
+                Series
+              </button>
+
               <div className="dropdown-divider"></div>
               <a className="dropdown-item" href="#">
                 Something else here
@@ -81,6 +92,7 @@ export default function Navbar() {
             onChange={(e) => {
               setValue(e.target.value);
             }}
+            value={value}
             className="form-control mr-sm-2"
             type="search"
             placeholder="Search"
@@ -88,10 +100,10 @@ export default function Navbar() {
           />
 
           <Link
-            to={"search"}
             onClick={() => {
               setSeach(value);
             }}
+            to={"search"}
             className="btn btn-outline-success my-2 my-sm-0"
           >
             Search

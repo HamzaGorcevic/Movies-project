@@ -3,7 +3,7 @@ import LayoutFile from "./LayoutFolder/layout-m";
 import { Routes, Route } from "react-router-dom";
 import Movie from "./singliemovie";
 import ContextShare from "./context";
-import SearchMovie from "./LayoutFolder/search-m";
+import SearchMovie from "./search-m";
 
 function App() {
   return (
