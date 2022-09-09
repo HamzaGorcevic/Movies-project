@@ -5,19 +5,20 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CreateContext } from "./context";
 import { DynamicStar } from "react-dynamic-star";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
 export default function LandingPage() {
   const [movies, setMovies] = useState([]);
-
-  const { shareId, setShareId, type } = useContext(CreateContext);
-
-  const key = "k_v6804dc1";
+  const { setShareId, type } = useContext(CreateContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(
         `https://imdb-api.com/en/API/${
           type !== "SearchMovie" ? "Top250TVs" : "Top250Movies"
-        }/k_j1hexm69`,
+        }/k_1p4c9h6h`,
         {
           params: {},
         }
@@ -25,11 +26,19 @@ export default function LandingPage() {
       .then((response) => {
         console.log("something");
         setMovies(response.data.items);
+        setLoading(false);
       });
   }, [type]);
 
   return (
     <div className="d-flex flex-wrap bg-dark justify-content-center pt-5">
+      {loading ? (
+        <div className="loader">
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        ""
+      )}
       {movies.map((el, index) => {
         return (
           <div
@@ -37,11 +46,11 @@ export default function LandingPage() {
             key={index}
             style={{ width: 400, height: 700, margin: 20 }}
           >
-            <img
+            <LazyLoadImage
               src={el.image}
+              height={"60%"}
+              width={"100%"}
               style={{
-                width: "100%",
-                height: "60%",
                 marginBottom: "auto",
               }}
             />

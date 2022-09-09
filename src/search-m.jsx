@@ -1,12 +1,11 @@
 import { useContext } from "react";
 import { CreateContext } from "./context";
 import { Link } from "react-router-dom";
-import { DynamicStar } from "react-dynamic-star";
-
+import { LazyLoadImage } from "react-lazy-load-image-component";
 export default function SearchMovie() {
-  const { shareMovie, setShareMovie } = useContext(CreateContext);
-  console.log(shareMovie, "in search page");
-  console.log("any");
+  const { shareMovie, setShareId } = useContext(CreateContext);
+  console.log(shareMovie, "Hello");
+
   return (
     <div className="container-fluid bg-dark d-flex flex-wrap justify-content-center align-items-center">
       {shareMovie?.map((el, index) => {
@@ -16,7 +15,7 @@ export default function SearchMovie() {
             key={index}
             style={{ width: 500, height: 650, margin: 10 }}
           >
-            <img
+            <LazyLoadImage
               src={el.image}
               style={{
                 width: "100%",
@@ -38,6 +37,9 @@ export default function SearchMovie() {
               </p>
             </div>
             <Link
+              onClick={() => {
+                setShareId(el.id);
+              }}
               to={"/movie"}
               className="btn btn-warning text-light font-weight-bold"
             >
