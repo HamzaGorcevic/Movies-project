@@ -9,29 +9,28 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function LandingPage() {
   const [movies, setMovies] = useState([]);
-  const { setShareId, type } = useContext(CreateContext);
+  const { setShareId, type, setLoader, setSeach, setSearchGenre } =
+    useContext(CreateContext);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
+    setSeach("");
+    setSearchGenre([]);
     axios
       .get(
         `https://imdb-api.com/en/API/${
           type !== "SearchMovie" ? "Top250TVs" : "Top250Movies"
-        }/k_1p4c9h6h`,
-        {
-          params: {},
-        }
+        }/k_eczf0vgn`
       )
       .then((response) => {
-        console.log("something");
         setMovies(response.data.items);
         setLoading(false);
       });
   }, [type]);
 
   return (
-    <div className="d-flex flex-wrap bg-dark justify-content-center pt-5">
+    <div className="d-flex flex-wrap bg-dark justif-content-center pt-5">
       {loading ? (
         <div className="loader">
           <div className="spinner"></div>

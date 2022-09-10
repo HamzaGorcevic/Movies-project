@@ -1,42 +1,25 @@
 import axios from "axios";
 import { useContext } from "react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CreateContext } from "../context";
 
 export default function Navbar() {
-  const [search, setSeach] = useState("");
+  let navigate = useNavigate();
   const [value, setValue] = useState("");
-  const { setShareMovie, setType, type } = useContext(CreateContext);
-  const [genre, setGenre] = useState([]);
-  const [searchGenre, setSearchGenre] = useState([]);
-
-  useEffect(() => {
-    setGenre([]);
-    axios
-      .get(`https://imdb-api.com/en/API/${type}/k_1p4c9h6h/${search}`)
-      .then((response) => {
-        setShareMovie(response.data.results);
-        setValue("");
-
-        console.log(type, search);
-      });
-  }, [search, type]);
-
-  useEffect(() => {
-    console.log(search, "asdasdasdsada");
-
-    setGenre([]);
-    axios
-      .get("https://imdb-api.com/API/AdvancedSearch/k_1p4c9h6h", {
-        params: {
-          genres: searchGenre + "",
-        },
-      })
-      .then((res) => {
-        setShareMovie(res.data.results);
-      });
-  }, [searchGenre]);
+  const {
+    setShareMovie,
+    setType,
+    type,
+    search,
+    setSeach,
+    genre,
+    setGenre,
+    searchGenre,
+    setSearchGenre,
+    loader,
+    setLoader,
+  } = useContext(CreateContext);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light  bg-warning">
@@ -57,22 +40,24 @@ export default function Navbar() {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          <button
+          <Link
+            to={"/"}
             className="btn btn-danger m-2"
             onClick={() => {
               setType("SearchMovie");
             }}
           >
             Movies
-          </button>
-          <button
+          </Link>
+          <Link
+            to={"/"}
             className="btn btn-danger m-2"
             onClick={() => {
               setType("SearchSeries");
             }}
           >
             Series
-          </button>
+          </Link>
 
           <div className="">
             <select
@@ -93,6 +78,7 @@ export default function Navbar() {
               <Link
                 className="btn btn-primary m-2"
                 onClick={() => {
+                  setLoader(true);
                   setSearchGenre(genre);
                 }}
                 to={"search"}
@@ -115,10 +101,10 @@ export default function Navbar() {
             placeholder="Search"
             aria-label="Search"
           />
-
           <Link
             onClick={() => {
               setSeach(value);
+              setLoader(true);
             }}
             to={"search"}
             className="btn btn-success my-2 my-sm-0"
