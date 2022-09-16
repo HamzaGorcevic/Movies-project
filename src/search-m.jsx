@@ -23,37 +23,35 @@ export default function SearchMovie() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(true);
+
   genres.current = searchGenre;
   searching.current = search;
+
   useEffect(() => {
     genres.current = [];
     setLoading(true);
-    if (searching.current !== null) {
+    if (searching.current !== "") {
       axios
-        .get(`https://imdb-api.com/en/API/${type}/k_eczf0vgn/${search}`)
+        .get(`https://imdb-api.com/en/API/${type}/k_4sewq6nu/${search}`)
         .then((response) => {
           setMovies(response.data.results);
-          setGenre([]);
+          setSeach("");
           setLoading(false);
         });
     }
-  }, [search, type]);
+  }, [type, search]);
 
   useEffect(() => {
-    searching.current = null;
-
-    if (typeof genres.current !== typeof nes) {
-      console.log(genres);
-      console.log("it renders ", searchGenre, "genre", genre);
+    if (searching.current === "") {
       axios
-        .get("https://imdb-api.com/API/AdvancedSearch/k_eczf0vgn", {
+        .get("https://imdb-api.com/API/AdvancedSearch/k_4sewq6nu", {
           params: {
             genres: searchGenre + "",
           },
         })
         .then((res) => {
           if (res.data.results !== []) {
-            setGenre([]);
+            setSeach("");
             setMovies(res.data.results);
           } else {
             setLoading(true);

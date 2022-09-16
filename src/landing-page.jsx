@@ -9,7 +9,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function LandingPage() {
   const [movies, setMovies] = useState([]);
-  const { setShareId, type, setLoader, setSeach, setSearchGenre } =
+  const { setShareId, type, setSeach, setSearchGenre } =
     useContext(CreateContext);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +21,7 @@ export default function LandingPage() {
       .get(
         `https://imdb-api.com/en/API/${
           type !== "SearchMovie" ? "Top250TVs" : "Top250Movies"
-        }/k_eczf0vgn`
+        }/k_4sewq6nu`
       )
       .then((response) => {
         setMovies(response.data.items);
@@ -30,7 +30,7 @@ export default function LandingPage() {
   }, [type]);
 
   return (
-    <div className="d-flex flex-wrap bg-dark justif-content-center pt-5">
+    <div className="d-flex flex-wrap bg-dark justify-content-center pt-5">
       {loading ? (
         <div className="loader">
           <div className="spinner"></div>

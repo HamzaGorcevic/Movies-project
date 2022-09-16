@@ -3,23 +3,32 @@ import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CreateContext } from "../context";
+import Multiselect from "multiselect-react-dropdown";
 
 export default function Navbar() {
-  let navigate = useNavigate();
+  const options = [
+    { name: "Action", id: 1 },
+    { name: "Adventure", id: 2 },
+    { name: "Comedy", id: 3 },
+    { name: "Horror", id: 4 },
+    { name: "Western", id: 5 },
+    { name: "War", id: 6 },
+  ];
+  const [optionsState] = useState(options);
+
   const [value, setValue] = useState("");
   const {
-    setShareMovie,
     setType,
-    type,
-    search,
+
     setSeach,
     genre,
     setGenre,
-    searchGenre,
+
     setSearchGenre,
-    loader,
+
     setLoader,
   } = useContext(CreateContext);
+  console.log(genre, "genre");
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light  bg-warning">
@@ -60,20 +69,17 @@ export default function Navbar() {
           </Link>
 
           <div className="">
-            <select
-              name=""
-              id=""
-              onChange={(option) => {
-                setGenre((arr) => [...arr, option.target.value]);
+            <Multiselect
+              options={optionsState}
+              displayValue={"name"}
+              onSelect={(event, index) => {
+                setGenre((arr) => [...arr, index.name]);
               }}
-            >
-              <option value="action">Action</option>
-              <option value="adventure">Adventure</option>
-              <option value="comedy">Comedy</option>
-              <option value="horror">Horror</option>
-              <option value="western">Western</option>
-              <option value="war">War</option>
-            </select>
+              onRemove={(event, index) => {
+                setGenre(genre.filter((el) => el !== index.name));
+              }}
+            />
+
             {genre ? (
               <Link
                 className="btn btn-primary m-2"
@@ -83,7 +89,7 @@ export default function Navbar() {
                 }}
                 to={"search"}
               >
-                Search
+                Search Genre
               </Link>
             ) : (
               ""

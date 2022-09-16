@@ -13,7 +13,7 @@ export default function Movie() {
 
   useEffect(() => {
     axios
-      .get(`https://imdb-api.com/en/API/Title/k_j1hexm62${`/${shareId}`}`)
+      .get(`https://imdb-api.com/en/API/Title/k_1p4c9h6h${`/${shareId}`}`)
       .then((response) => {
         setMovie(response.data);
         console.log(response.data);
