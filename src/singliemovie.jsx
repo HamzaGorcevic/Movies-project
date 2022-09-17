@@ -1,5 +1,3 @@
-import LandingPage from "./landing-page";
-import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CreateContext } from "./context";
 import { useEffect } from "react";
@@ -19,10 +17,9 @@ export default function Movie() {
         console.log(response.data);
       });
   }, []);
-  console.log(movie.imDbRatingCoun, "why undef");
   return (
     <div className="container-fluid bg-dark p-5">
-      <div className="d-flex justify-content-between w-100">
+      <div className="d-lg-flex justify-content-between w-100">
         <div
           style={{
             width: "auto",
@@ -63,7 +60,7 @@ export default function Movie() {
               left: "2%",
             }}
           >
-            <h1 style={{ whiteSpace: "nowrap" }}>{movie.title}</h1>
+            <h1 style={{ width: "120%" }}>{movie.title}</h1>
             <div
               className="d-flex flex-column"
               style={{

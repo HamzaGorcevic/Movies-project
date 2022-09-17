@@ -9,19 +9,15 @@ export default function SearchMovie() {
 
   const {
     setShareId,
-    setGenre,
+
     search,
     type,
     searchGenre,
-    loader,
+
     setSeach,
-    value,
-    setValue,
-    setSearchGenre,
-    genre,
   } = useContext(CreateContext);
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [check, setCheck] = useState(true);
 
   genres.current = searchGenre;
@@ -29,7 +25,7 @@ export default function SearchMovie() {
 
   useEffect(() => {
     genres.current = [];
-    setLoading(true);
+    console.log("klkl puta");
     if (searching.current !== "") {
       axios
         .get(`https://imdb-api.com/en/API/${type}/k_4sewq6nu/${search}`)
@@ -37,6 +33,7 @@ export default function SearchMovie() {
           setMovies(response.data.results);
           setSeach("");
           setLoading(false);
+          console.log("should be false", loading);
         });
     }
   }, [type, search]);
@@ -59,7 +56,7 @@ export default function SearchMovie() {
         });
     }
   }, [searchGenre]);
-
+  console.log(loading);
   return (
     <div className="container-fluid bg-dark d-flex flex-wrap justify-content-center align-items-center">
       {loading ? (

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CreateContext } from "../context";
 import Multiselect from "multiselect-react-dropdown";
@@ -13,7 +13,9 @@ export default function Navbar() {
     { name: "Horror", id: 4 },
     { name: "Western", id: 5 },
     { name: "War", id: 6 },
+    { name: "Spoty", id: 7 },
   ];
+  const resetRef = useRef();
   const [optionsState] = useState(options);
 
   const [value, setValue] = useState("");
@@ -33,7 +35,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light  bg-warning">
       <Link className="navbar-brand  text-success" to={"/"}>
-        <h1 className="font-weight-bold">Home</h1>
+        <h1 className="font-weight-bold bg-danger">Imdb</h1>
       </Link>
       <button
         className="navbar-toggler"
@@ -68,9 +70,26 @@ export default function Navbar() {
             Series
           </Link>
 
-          <div className="">
+          <div className="d-flex">
             <Multiselect
+              style={{
+                chips: {
+                  background: "red",
+                },
+                multiselectContainer: {
+                  color: "orange",
+                },
+                searchBox: {
+                  border: "none",
+                  "border-bottom": "1px solid blue",
+                  "border-radius": "10px",
+                },
+              }}
+              onSearch={(value) => {
+                setGenre([...genre, value]);
+              }}
               options={optionsState}
+              placeholder={"Chose your genre"}
               displayValue={"name"}
               onSelect={(event, index) => {
                 setGenre((arr) => [...arr, index.name]);
@@ -80,20 +99,16 @@ export default function Navbar() {
               }}
             />
 
-            {genre ? (
-              <Link
-                className="btn btn-primary m-2"
-                onClick={() => {
-                  setLoader(true);
-                  setSearchGenre(genre);
-                }}
-                to={"search"}
-              >
-                Search Genre
-              </Link>
-            ) : (
-              ""
-            )}
+            <Link
+              className="btn btn-primary m-2"
+              onClick={() => {
+                setLoader(true);
+                setSearchGenre(genre);
+              }}
+              to={"search"}
+            >
+              Search Genre
+            </Link>
           </div>
         </ul>
         <form className="form-inline my-2 my-lg-0">
@@ -113,7 +128,7 @@ export default function Navbar() {
               setLoader(true);
             }}
             to={"search"}
-            className="btn btn-success my-2 my-sm-0"
+            className="btn btn-primary my-2 my-sm-0"
           >
             Search
           </Link>
