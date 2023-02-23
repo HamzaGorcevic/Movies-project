@@ -17,15 +17,13 @@ export default function SearchMovie() {
     setSeach,
   } = useContext(CreateContext);
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [check, setCheck] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   genres.current = searchGenre;
   searching.current = search;
 
   useEffect(() => {
     genres.current = [];
-    console.log("klkl puta");
     if (searching.current !== "") {
       axios
         .get(`https://imdb-api.com/en/API/${type}/k_4sewq6nu/${search}`)
@@ -33,7 +31,7 @@ export default function SearchMovie() {
           setMovies(response.data.results);
           setSeach("");
           setLoading(false);
-          console.log("should be false", loading);
+          console.log(loading, "first");
         });
     }
   }, [type, search]);
@@ -56,56 +54,58 @@ export default function SearchMovie() {
         });
     }
   }, [searchGenre]);
-  console.log(loading);
+  console.log(loading, "before");
   return (
     <div className="container-fluid bg-dark d-flex flex-wrap justify-content-center align-items-center">
       {loading ? (
         <div className="loader">
+          {console.log(loading, "second")}
           <div className="spinner"></div>
         </div>
       ) : (
-        ""
+        <div>
+          {movies?.map((el, index) => {
+            return (
+              <div
+                className="bg-primary text-light p-2 d-flex flex-column justify-content-end"
+                key={index}
+                style={{ width: 500, height: 650, margin: 10 }}
+              >
+                <LazyLoadImage
+                  src={el.image}
+                  style={{
+                    width: "100%",
+                    height: "60%",
+                    marginBottom: "auto",
+                  }}
+                />
+
+                <h2>{el.title}</h2>
+                <h6>{el.description}</h6>
+
+                <div className="justify-content-between d-flex">
+                  <p>{el.year}</p>
+                  <p>
+                    <span>
+                      <i className="bi bi-star-fill text-warning mr-2"></i>
+                    </span>
+                    {el.imDbRating}
+                  </p>
+                </div>
+                <Link
+                  onClick={() => {
+                    setShareId(el.id);
+                  }}
+                  to={"/movie"}
+                  className="btn btn-warning text-light font-weight-bold"
+                >
+                  Check this movie
+                </Link>
+              </div>
+            );
+          })}
+        </div>
       )}
-      {movies?.map((el, index) => {
-        return (
-          <div
-            className="bg-primary text-light p-2 d-flex flex-column justify-content-end"
-            key={index}
-            style={{ width: 500, height: 650, margin: 10 }}
-          >
-            <LazyLoadImage
-              src={el.image}
-              style={{
-                width: "100%",
-                height: "60%",
-                marginBottom: "auto",
-              }}
-            />
-
-            <h2>{el.title}</h2>
-            <h6>{el.description}</h6>
-
-            <div className="justify-content-between d-flex">
-              <p>{el.year}</p>
-              <p>
-                <span>
-                  <i className="bi bi-star-fill text-warning mr-2"></i>
-                </span>
-                {el.imDbRating}
-              </p>
-            </div>
-            <Link
-              onClick={() => {
-                setShareId(el.id);
-              }}
-              to={"/movie"}
-              className="btn btn-warning text-light font-weight-bold"
-            >
-              Check this movie
-            </Link>
-          </div>
-        );
-      })}
     </div>
   );
 }

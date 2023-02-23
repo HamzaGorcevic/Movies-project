@@ -33,9 +33,12 @@ export default function Navbar() {
   console.log(genre, "genre");
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light  bg-warning">
-      <Link className="navbar-brand  text-success" to={"/"}>
-        <h1 className="font-weight-bold bg-danger">Imdb</h1>
+    <nav
+      className="navbar navbar-expand-lg navbar-light"
+      style={{ background: "gray" }}
+    >
+      <Link className="navbar-brand  text-light " to={"/"}>
+        <h1 className="font-weight-bold bg-primary p-1 rounded">IMDB</h1>
       </Link>
       <button
         className="navbar-toggler"
@@ -53,7 +56,7 @@ export default function Navbar() {
         <ul className="navbar-nav mr-auto">
           <Link
             to={"/"}
-            className="btn btn-danger m-2"
+            className="btn btn-outline-primary text-dark m-2"
             onClick={() => {
               setType("SearchMovie");
             }}
@@ -62,7 +65,7 @@ export default function Navbar() {
           </Link>
           <Link
             to={"/"}
-            className="btn btn-danger m-2"
+            className="btn btn-outline-primary text-dark m-2"
             onClick={() => {
               setType("SearchSeries");
             }}
@@ -70,18 +73,22 @@ export default function Navbar() {
             Series
           </Link>
 
-          <div className="d-flex">
+          <div
+            className="d-flex"
+            style={{
+              alignItems: "center",
+            }}
+          >
             <Multiselect
               style={{
                 chips: {
-                  background: "red",
+                  background: "blue",
                 },
                 multiselectContainer: {
                   color: "orange",
                 },
                 searchBox: {
-                  border: "none",
-                  "border-bottom": "1px solid blue",
+                  background: "white",
                   "border-radius": "10px",
                 },
               }}
@@ -100,7 +107,8 @@ export default function Navbar() {
             />
 
             <Link
-              className="btn btn-primary m-2"
+              className="btn btn-primary"
+              style={{ height: 40, marginLeft: "5px" }}
               onClick={() => {
                 setLoader(true);
                 setSearchGenre(genre);
