@@ -41,9 +41,9 @@ export default function LandingPage() {
       {movies.map((el, index) => {
         return (
           <div
-            className="bg-primary text-light p-2 d-flex flex-column justify-content-end"
+            className=" bg-primary text-light p-2 d-flex flex-column justify-content-end"
             key={index}
-            style={{ width: 400, height: 700, margin: 20 }}
+            style={{ width: 400, height: 600, margin: 20 }}
           >
             <LazyLoadImage
               src={el.image}
@@ -73,8 +73,9 @@ export default function LandingPage() {
               </p>
             </div>
             <Link
+              style={{ background: "#D98514" }}
               to={"/movie"}
-              className="btn btn-warning text-light font-weight-bold"
+              className="btn  text-light font-weight-bold"
               onClick={() => {
                 setShareId(el.id);
               }}

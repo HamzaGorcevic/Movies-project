@@ -6,6 +6,7 @@ import { CreateContext } from "../context";
 import Multiselect from "multiselect-react-dropdown";
 
 export default function Navbar() {
+  const [active, setActive] = useState("movies");
   const options = [
     { name: "Action", id: 1 },
     { name: "Adventure", id: 2 },
@@ -30,15 +31,19 @@ export default function Navbar() {
 
     setLoader,
   } = useContext(CreateContext);
-  console.log(genre, "genre");
 
   return (
     <nav
-      className="navbar navbar-expand-lg navbar-light"
-      style={{ background: "gray" }}
+      className="bg-dark navbar navbar-expand-lg navbar-light"
+      style={{ boxShadow: "2px 2px 10px #0d6efd" }}
     >
       <Link className="navbar-brand  text-light " to={"/"}>
-        <h1 className="font-weight-bold bg-primary p-1 rounded">IMDB</h1>
+        <h1
+          className="font-weight-bold b p-1 rounded"
+          style={{ background: "#D98514" }}
+        >
+          IMDB
+        </h1>
       </Link>
       <button
         className="navbar-toggler"
@@ -56,8 +61,11 @@ export default function Navbar() {
         <ul className="navbar-nav mr-auto">
           <Link
             to={"/"}
-            className="btn btn-outline-primary text-dark m-2"
+            className={`btn ${
+              active == "movies" ? "btn-primary" : "btn-outline-primary"
+            }  text-dark m-2`}
             onClick={() => {
+              setActive("movies");
               setType("SearchMovie");
             }}
           >
@@ -65,8 +73,11 @@ export default function Navbar() {
           </Link>
           <Link
             to={"/"}
-            className="btn btn-outline-primary text-dark m-2"
+            className={`btn ${
+              active == "series" ? "btn-primary" : "btn-outline-primary"
+            } text-dark m-2`}
             onClick={() => {
+              setActive("series");
               setType("SearchSeries");
             }}
           >

@@ -19,7 +19,7 @@ export default function Movie() {
   }, []);
   return (
     <div className="container-fluid bg-dark p-5">
-      <div className="d-lg-flex justify-content-between w-100">
+      <div className="d-lg-flex justify-content-around w-100">
         <div
           style={{
             width: "auto",
@@ -83,20 +83,23 @@ export default function Movie() {
             </div>
           </div>
         </div>
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column ">
           <h2 className="text-white">{movie.fullTitle}</h2>
-          <h3 style={{ color: "orange" }}>
+          <h3 style={{ color: "#D98514" }}>
             {" "}
             <span className="text-white">Writers:</span> {movie.writers}
           </h3>
-          <h5
+          <p
             style={{
               width: "70ch",
+              color: "white",
             }}
           >
             {movie.plot}
+          </p>
+          <h5 style={{ marginTop: "auto" }}>
+            Realese date:{movie.releaseDate}
           </h5>
-          <h5>Realese date:{movie.releaseDate}</h5>
         </div>
       </div>
     </div>
