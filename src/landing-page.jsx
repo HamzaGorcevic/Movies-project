@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { CreateContext } from "./context";
 import { DynamicStar } from "react-dynamic-star";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import KEY from "./apikey";
 
 export default function LandingPage() {
   const [movies, setMovies] = useState([]);
@@ -18,13 +19,15 @@ export default function LandingPage() {
     setSeach("");
     setSearchGenre([]);
     axios
-      .get(
-        `https://imdb-api.com/en/API/${
-          type !== "SearchMovie" ? "Top250TVs" : "Top250Movies"
-        }/k_4sewq6nu`
-      )
+      .get(`https://imdb188.p.rapidapi.com/api/v1/getFanFavorites`, {
+        params: { country: "US" },
+        headers: {
+          "X-RapidAPI-Key": `${KEY}`,
+          "X-RapidAPI-Host": "imdb188.p.rapidapi.com",
+        },
+      })
       .then((response) => {
-        setMovies(response.data.items);
+        setMovies(response.data.data.list);
         setLoading(false);
       });
   }, [type]);
@@ -39,6 +42,7 @@ export default function LandingPage() {
         ""
       )}
       {movies.map((el, index) => {
+        console.log("el", el.originalTitleText.text);
         return (
           <div
             className=" bg-primary text-light p-2 d-flex flex-column justify-content-end"
@@ -46,7 +50,7 @@ export default function LandingPage() {
             style={{ width: 400, height: 600, margin: 20 }}
           >
             <LazyLoadImage
-              src={el.image}
+              src={el.primaryImage.imageUrl}
               height={"60%"}
               width={"100%"}
               style={{
@@ -55,21 +59,22 @@ export default function LandingPage() {
             />
 
             <h3>
-              {el.title?.length > 20
-                ? `${el.title?.slice(0, 20)}....`
-                : el.title}
+              {el.originalTitleText.text?.length > 20
+                ? `${el.originalTitleText.text?.slice(0, 20)}....`
+                : el.originalTitleText.text}
             </h3>
+
             <div className="d-flex flex-column">
-              <p>{el.year}</p>
+              <p>{el.releaseDate.year}</p>
               <p>
                 <DynamicStar
-                  rating={el.imDbRating}
+                  rating={el.ratingsSummary.aggregateRating}
                   width={20}
                   height={20}
                   totalStars={10}
                   emptyStarColor={"grey"}
                 />
-                Rated: {el.imDbRatingCount}
+                Rated: {el.ratingsSummary.aggregateRating}
               </p>
             </div>
             <Link

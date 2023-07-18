@@ -3,19 +3,14 @@ import { CreateContext } from "./context";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import KEY from "./apikey";
+import { DynamicStar } from "react-dynamic-star";
 export default function SearchMovie() {
   let searching = useRef();
   let genres = useRef();
 
-  const {
-    setShareId,
-
-    search,
-    type,
-    searchGenre,
-
-    setSeach,
-  } = useContext(CreateContext);
+  const { setShareId, search, type, searchGenre, setSeach } =
+    useContext(CreateContext);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -24,11 +19,23 @@ export default function SearchMovie() {
 
   useEffect(() => {
     genres.current = [];
+
     if (searching.current !== "") {
       axios
-        .get(`https://imdb-api.com/en/API/${type}/k_4sewq6nu/${search}`)
+        .get(`https://imdb188.p.rapidapi.com/api/v1/getFanFavorites`, {
+          headers: {
+            "X-RapidAPI-Key": `${KEY}`,
+            "X-RapidAPI-Host": "imdb188.p.rapidapi.com",
+          },
+          data: {
+            limit: 50,
+            genre: {
+              allGenreIds: genres,
+            },
+          },
+        })
         .then((response) => {
-          setMovies(response.data.results);
+          setMovies(response.data.data.list);
           setSeach("");
           setLoading(false);
           console.log(loading, "first");
@@ -39,73 +46,82 @@ export default function SearchMovie() {
   useEffect(() => {
     if (searching.current === "") {
       axios
-        .get("https://imdb-api.com/API/AdvancedSearch/k_4sewq6nu", {
-          params: {
-            genres: searchGenre + "",
+        .get(`https://imdb188.p.rapidapi.com/api/v1/getFanFavorites`, {
+          headers: {
+            "X-RapidAPI-Key": `${KEY}`,
+            "X-RapidAPI-Host": "imdb188.p.rapidapi.com",
           },
         })
         .then((res) => {
           if (res.data.results !== []) {
             setSeach("");
-            setMovies(res.data.results);
+            setMovies(res.data.data.list);
           } else {
             setLoading(true);
           }
         });
     }
   }, [searchGenre]);
-  console.log(loading, "before");
+
+  console.log("movies:", movies);
+
   return (
-    <div className="container-fluid bg-dark d-flex flex-wrap justify-content-center align-items-center">
+    <div className="d-flex flex-wrap bg-dark justify-content-center pt-5">
       {loading ? (
         <div className="loader">
-          {console.log(loading, "second")}
           <div className="spinner"></div>
         </div>
       ) : (
-        <div>
-          {movies?.map((el, index) => {
-            return (
-              <div
-                className="bg-primary text-light p-2 d-flex flex-column justify-content-end"
-                key={index}
-                style={{ width: 500, height: 650, margin: 10 }}
-              >
-                <LazyLoadImage
-                  src={el.image}
-                  style={{
-                    width: "100%",
-                    height: "60%",
-                    marginBottom: "auto",
-                  }}
-                />
-
-                <h2>{el.title}</h2>
-                <h6>{el.description}</h6>
-
-                <div className="justify-content-between d-flex">
-                  <p>{el.year}</p>
-                  <p>
-                    <span>
-                      <i className="bi bi-star-fill text-warning mr-2"></i>
-                    </span>
-                    {el.imDbRating}
-                  </p>
-                </div>
-                <Link
-                  onClick={() => {
-                    setShareId(el.id);
-                  }}
-                  to={"/movie"}
-                  className="btn btn-warning text-light font-weight-bold"
-                >
-                  Check this movie
-                </Link>
-              </div>
-            );
-          })}
-        </div>
+        ""
       )}
+      {movies.map((el, index) => {
+        return (
+          <div
+            className=" bg-primary text-light p-2 d-flex flex-column justify-content-end"
+            key={index}
+            style={{ width: 400, height: 600, margin: 20 }}
+          >
+            <LazyLoadImage
+              src={el.primaryImage.imageUrl}
+              height={"60%"}
+              width={"100%"}
+              style={{
+                marginBottom: "auto",
+              }}
+            />
+
+            <h3>
+              {el.originalTitleText.text?.length > 20
+                ? `${el.originalTitleText.text?.slice(0, 20)}....`
+                : el.originalTitleText.text}
+            </h3>
+
+            <div className="d-flex flex-column">
+              <p>{el.releaseDate.year}</p>
+              <p>
+                <DynamicStar
+                  rating={el.ratingsSummary.aggregateRating}
+                  width={20}
+                  height={20}
+                  totalStars={10}
+                  emptyStarColor={"grey"}
+                />
+                Rated: {el.ratingsSummary.aggregateRating}
+              </p>
+            </div>
+            <Link
+              style={{ background: "#D98514" }}
+              to={"/movie"}
+              className="btn  text-light font-weight-bold"
+              onClick={() => {
+                setShareId(el.id);
+              }}
+            >
+              Check this movie
+            </Link>
+          </div>
+        );
+      })}
     </div>
   );
 }

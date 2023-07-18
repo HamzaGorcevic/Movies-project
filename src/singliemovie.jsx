@@ -17,6 +17,7 @@ export default function Movie() {
         console.log(response.data);
       });
   }, []);
+
   return (
     <div className="container-fluid bg-dark p-5">
       <div className="d-lg-flex justify-content-around w-100">
