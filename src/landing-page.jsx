@@ -19,14 +19,24 @@ export default function LandingPage() {
     setSeach("");
     setSearchGenre([]);
     axios
-      .get(`https://imdb188.p.rapidapi.com/api/v1/getFanFavorites`, {
-        params: { country: "US" },
+      .request({
+        method: "POST",
+        url: `https://imdb188.p.rapidapi.com/api/v1/${type}`,
+
         headers: {
+          "content-type": "application/json",
           "X-RapidAPI-Key": `${KEY}`,
           "X-RapidAPI-Host": "imdb188.p.rapidapi.com",
         },
+        data: {
+          country: {
+            anyPrimaryCountries: ["IN"],
+          },
+          limit: 50,
+        },
       })
       .then((response) => {
+        console.log(response);
         setMovies(response.data.data.list);
         setLoading(false);
       });
@@ -42,7 +52,6 @@ export default function LandingPage() {
         ""
       )}
       {movies.map((el, index) => {
-        console.log("el", el.originalTitleText.text);
         return (
           <div
             className=" bg-primary text-light p-2 d-flex flex-column justify-content-end"
@@ -50,7 +59,7 @@ export default function LandingPage() {
             style={{ width: 400, height: 600, margin: 20 }}
           >
             <LazyLoadImage
-              src={el.primaryImage.imageUrl}
+              src={el.title.primaryImage.imageUrl}
               height={"60%"}
               width={"100%"}
               style={{
@@ -59,22 +68,22 @@ export default function LandingPage() {
             />
 
             <h3>
-              {el.originalTitleText.text?.length > 20
-                ? `${el.originalTitleText.text?.slice(0, 20)}....`
-                : el.originalTitleText.text}
+              {el.title.originalTitleText.text?.length > 20
+                ? `${el.title.originalTitleText.text?.slice(0, 20)}....`
+                : el.title.originalTitleText.text}
             </h3>
 
             <div className="d-flex flex-column">
-              <p>{el.releaseDate.year}</p>
+              {/* <p>{el.title.releaseDate.year}</p> */}
               <p>
                 <DynamicStar
-                  rating={el.ratingsSummary.aggregateRating}
+                  rating={el.title.ratingsSummary.aggregateRating}
                   width={20}
                   height={20}
                   totalStars={10}
                   emptyStarColor={"grey"}
                 />
-                Rated: {el.ratingsSummary.aggregateRating}
+                Rated: {el.title.ratingsSummary.aggregateRating}
               </p>
             </div>
             <Link

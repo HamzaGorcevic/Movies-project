@@ -66,7 +66,7 @@ export default function Navbar() {
             }  text-dark m-2`}
             onClick={() => {
               setActive("movies");
-              setType("SearchMovie");
+              setType("getPopularMovies");
             }}
           >
             Movies
@@ -78,7 +78,7 @@ export default function Navbar() {
             } text-dark m-2`}
             onClick={() => {
               setActive("series");
-              setType("SearchSeries");
+              setType("getPopularTVShows");
             }}
           >
             Series

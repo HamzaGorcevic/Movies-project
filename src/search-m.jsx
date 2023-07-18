@@ -14,46 +14,51 @@ export default function SearchMovie() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  genres.current = searchGenre;
-  searching.current = search;
+  // useEffect(() => {
+  //   genres.current = [];
+
+  //   if (true) {
+  //     axios
+  //       .get(`https://imdb188.p.rapidapi.com/api/v1/searchIMDB`, {
+  //         headers: {
+  //           "X-RapidAPI-Key": `${KEY}`,
+  //           "X-RapidAPI-Host": "imdb188.p.rapidapi.com",
+  //         },
+  //         params: {
+  //           query: search,
+  //         },
+  //       })
+  //       .then((response) => {
+  //         console.log(response);
+  //         setMovies(response.data);
+  //         setSeach("");
+  //         setLoading(false);
+  //         console.log(loading, "first");
+  //       });
+  //   }
+  // }, [type, search]);
 
   useEffect(() => {
-    genres.current = [];
-
-    if (searching.current !== "") {
+    if (searching.current === "") {
       axios
-        .get(`https://imdb188.p.rapidapi.com/api/v1/getFanFavorites`, {
+        .request({
+          method: "POST",
+          url: `https://imdb188.p.rapidapi.com/api/v1/getPopularMovies`,
           headers: {
+            "content-type": "application/json",
             "X-RapidAPI-Key": `${KEY}`,
             "X-RapidAPI-Host": "imdb188.p.rapidapi.com",
           },
           data: {
             limit: 50,
             genre: {
-              allGenreIds: genres,
+              allGenreIds: searchGenre,
             },
           },
         })
-        .then((response) => {
-          setMovies(response.data.data.list);
-          setSeach("");
-          setLoading(false);
-          console.log(loading, "first");
-        });
-    }
-  }, [type, search]);
-
-  useEffect(() => {
-    if (searching.current === "") {
-      axios
-        .get(`https://imdb188.p.rapidapi.com/api/v1/getFanFavorites`, {
-          headers: {
-            "X-RapidAPI-Key": `${KEY}`,
-            "X-RapidAPI-Host": "imdb188.p.rapidapi.com",
-          },
-        })
         .then((res) => {
-          if (res.data.results !== []) {
+          console.log("res data", res.data);
+          if (res.data.data.list !== []) {
             setSeach("");
             setMovies(res.data.data.list);
           } else {
@@ -82,7 +87,7 @@ export default function SearchMovie() {
             style={{ width: 400, height: 600, margin: 20 }}
           >
             <LazyLoadImage
-              src={el.primaryImage.imageUrl}
+              src={el.title.primaryImage.imageUrl}
               height={"60%"}
               width={"100%"}
               style={{
@@ -91,22 +96,22 @@ export default function SearchMovie() {
             />
 
             <h3>
-              {el.originalTitleText.text?.length > 20
-                ? `${el.originalTitleText.text?.slice(0, 20)}....`
-                : el.originalTitleText.text}
+              {el.title.originalTitleText.text?.length > 20
+                ? `${el.title.originalTitleText.text?.slice(0, 20)}....`
+                : el.title.originalTitleText.text}
             </h3>
 
             <div className="d-flex flex-column">
-              <p>{el.releaseDate.year}</p>
+              {/* <p>{el.title.releaseDate.year}</p> */}
               <p>
                 <DynamicStar
-                  rating={el.ratingsSummary.aggregateRating}
+                  rating={el.title.ratingsSummary.aggregateRating}
                   width={20}
                   height={20}
                   totalStars={10}
                   emptyStarColor={"grey"}
                 />
-                Rated: {el.ratingsSummary.aggregateRating}
+                Rated: {el.title.ratingsSummary.aggregateRating}
               </p>
             </div>
             <Link
