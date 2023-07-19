@@ -91,7 +91,7 @@ export default function LandingPage() {
               to={"/movie"}
               className="btn  text-light font-weight-bold"
               onClick={() => {
-                setShareId(el.id);
+                setShareId(el);
               }}
             >
               Check this movie

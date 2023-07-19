@@ -9,15 +9,18 @@ export default function Movie() {
   const { shareId } = useContext(CreateContext);
   const [movie, setMovie] = useState({});
 
-  useEffect(() => {
-    axios
-      .get(`https://imdb-api.com/en/API/Title/k_1p4c9h6h${`/${shareId}`}`)
-      .then((response) => {
-        setMovie(response.data);
-        console.log(response.data);
-      });
-  }, []);
+  console.log("shared", shareId);
 
+  // useEffect(() => {
+  //   axios
+  //     .get(`https://imdb-api.com/en/API/Title/k_1p4c9h6h${`/${shareId}`}`)
+  //     .then((response) => {
+  //       setMovie(response.data);
+  //       console.log(response.data);
+  //     });
+  // }, []);
+
+  console.log("image", shareId);
   return (
     <div className="container-fluid bg-dark p-5">
       <div className="d-lg-flex justify-content-around w-100">
@@ -29,14 +32,14 @@ export default function Movie() {
           }}
         >
           <img
-            src={movie.image}
+            src={shareId.title.primaryImage.imageUrl}
             alt=""
             style={{
               backgroundAttachment: "fixed",
               borderRadius: 20,
-              objectFit: "cover",
-
+              objectFit: "contain",
               height: "100%",
+              width: "100%",
             }}
           />
           <div
@@ -61,7 +64,9 @@ export default function Movie() {
               left: "2%",
             }}
           >
-            <h1 style={{ width: "120%" }}>{movie.title}</h1>
+            <h1 style={{ width: "120%" }}>
+              {shareId.title.originalTitleText.text}
+            </h1>
             <div
               className="d-flex flex-column"
               style={{
@@ -70,8 +75,8 @@ export default function Movie() {
             >
               <h2>
                 <DynamicStar
-                  rating={movie.imDbRating}
-                  totalStars={10}
+                  rating={shareId.title.ratingsSummary.aggregateRating / 2}
+                  totalStars={5}
                   width={30}
                   height={30}
                   emptyStarColor={"grey"}
@@ -79,28 +84,31 @@ export default function Movie() {
               </h2>
 
               <h4 style={{ whiteSpace: "nowrap" }}>
-                {movie.imDbRatingVotes} votes
+                {shareId.title.ratingsSummary.aggregateRating} votes
               </h4>
             </div>
           </div>
         </div>
-        <div className="d-flex flex-column ">
-          <h2 className="text-white">{movie.fullTitle}</h2>
+        <div className="d-flex flex-column m-5">
+          <h2 className="text-white">{shareId.title.titleText.title}</h2>
           <h3 style={{ color: "#D98514" }}>
             {" "}
-            <span className="text-white">Writers:</span> {movie.writers}
+            <span className="text-white">Writers:</span> Lorem ipsum dolor sit
+            amet consectetur adipisicing elit. Odio, non?
           </h3>
           <p
             style={{
-              width: "70ch",
+              width: "60vw",
               color: "white",
             }}
           >
-            {movie.plot}
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore
+            quod quidem molestiae magnam provident obcaecati, dolore aut earum
+            ipsa ut iure, vero illo omnis eius sunt atque blanditiis eum
+            dignissimos, enim labore. Qui dolorum in accusantium voluptate
+            quisquam, voluptatibus reprehenderit.
           </p>
-          <h5 style={{ marginTop: "auto" }}>
-            Realese date:{movie.releaseDate}
-          </h5>
+          <h5 style={{ marginTop: "auto" }}>{2023}</h5>
         </div>
       </div>
     </div>
