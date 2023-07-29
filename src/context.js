@@ -5,7 +5,7 @@ export { CreateContext };
 export default function ContextShare({ children }) {
   const [shareId, setShareId] = useState("");
   const [shareMovie, setShareMovie] = useState("");
-  const [type, setType] = useState("getPopularTVShows");
+  const [type, setType] = useState("movie");
   const [genre, setGenre] = useState([]);
   const [searchGenre, setSearchGenre] = useState([]);
   const [search, setSeach] = useState("");

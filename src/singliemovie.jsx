@@ -32,7 +32,7 @@ export default function Movie() {
           }}
         >
           <img
-            src={shareId.title.primaryImage.imageUrl}
+            src={shareId?.title?.primaryImage?.imageUrl}
             alt=""
             style={{
               backgroundAttachment: "fixed",
